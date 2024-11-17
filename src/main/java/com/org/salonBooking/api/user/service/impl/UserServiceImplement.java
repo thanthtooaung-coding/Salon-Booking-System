@@ -17,6 +17,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class UserServiceImplement extends BaseServiceImpl<User, Long> implements UserService {
@@ -38,9 +40,9 @@ public class UserServiceImplement extends BaseServiceImpl<User, Long> implements
     }
 
     @Override
-    public UserDto getUserByUsername(String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+    public UserDto getUserByName(String name) {
+        User user = userRepository.findByName(name)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "name", name));
         return modelMapper.map(user, UserDto.class);
     }
 
@@ -63,10 +65,6 @@ public class UserServiceImplement extends BaseServiceImpl<User, Long> implements
             throw new DataIntegrityViolationException("Email already exists.");
         }
 
-        if (userRepository.existsByUsername(userDto.getUsername())) {
-            throw new DataIntegrityViolationException("Username already exists.");
-        }
-
         User user = modelMapper.map(userDto, User.class);
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         User savedUser = create(user);
@@ -76,6 +74,25 @@ public class UserServiceImplement extends BaseServiceImpl<User, Long> implements
     @Override
     public UserDto updateUser(Long id, UserUpdateDto userDto) {
         User user = findById(id);
+
+        if (userDto.getEmail() != null && !user.getEmail().equals(userDto.getEmail()) && userRepository.existsByEmail(userDto.getEmail())) {
+            throw new DataIntegrityViolationException("Email already exists.");
+        }
+
+        Optional.ofNullable(userDto.getName())
+                .filter(name -> !name.isEmpty())
+                .ifPresent(user::setName);
+
+        Optional.ofNullable(userDto.getEmail())
+                .filter(email -> !email.isEmpty())
+                .ifPresent(user::setEmail);
+
+        Optional.ofNullable(userDto.getIsPremium())
+                .ifPresent(user::setIsPremium);
+
+        Optional.ofNullable(userDto.getRole())
+                .ifPresent(user::setRole);
+
         User updatedUser = update(id, user);
         return modelMapper.map(updatedUser, UserDto.class);
     }
@@ -86,7 +103,7 @@ public class UserServiceImplement extends BaseServiceImpl<User, Long> implements
     }
 
     @Override
-    public Page<UserDto> getUsersByUsername(String username, Pageable pageable) {
+    public Page<UserDto> getUsersByName(String username, Pageable pageable) {
         return null;
     }
 

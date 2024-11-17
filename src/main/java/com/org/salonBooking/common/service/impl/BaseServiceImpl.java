@@ -78,7 +78,7 @@ public abstract class BaseServiceImpl<T, ID extends Serializable> implements Bas
     @Override
     public T update(ID id, T entity) {
         ensureResourceExists(id);
-        return null;
+        return getRepository().save(entity);
     }
 
     /**

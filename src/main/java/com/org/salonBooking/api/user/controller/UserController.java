@@ -50,9 +50,6 @@ public class UserController {
     @GetMapping
     public ResponseEntity<ApiResponse<Page<UserDto>>> getAllUsers(Pageable pageable) {
         Page<UserDto> users = userService.getAllUsers(pageable);
-        for (UserDto user : users.getContent()) {
-            System.out.println(user.getUsername());
-        }
         ApiResponse<Page<UserDto>> response = ApiResponse.<Page<UserDto>>builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.OK.value())

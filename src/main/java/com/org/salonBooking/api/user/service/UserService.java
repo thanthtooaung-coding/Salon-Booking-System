@@ -10,12 +10,12 @@ import org.springframework.data.domain.Pageable;
 
 public interface UserService extends BaseService<User, Long> {
     UserDto getUserById(Long id);
-    UserDto getUserByUsername(String username);
+    UserDto getUserByName(String username);
     UserDto getUserByEmail(String email);
     Page<UserDto> getAllUsers(Pageable pageable);
     UserDto createUser(UserCreateDto userDto);
     UserDto updateUser(Long id, UserUpdateDto userDto);
     Page<UserDto> searchUsers(String keyword, Pageable pageable);// TODO
-    Page<UserDto> getUsersByUsername(String username, Pageable pageable); // TODO
+    Page<UserDto> getUsersByName(String username, Pageable pageable); // TODO
     void deleteUser(Long id);
 }
