@@ -3,7 +3,6 @@ package com.org.salonBooking.api.user.dto;
 import com.org.salonBooking.api.user.enums.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,18 +18,20 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserCreateDto {
 
-    @NotBlank(message = "Username is required")
-    @Size(max = 50, message = "Username cannot exceed 50 characters")
-    private String username;
+    @NotBlank(message = "Name is required")
+    @Size(max = 100, message = "Name cannot exceed 100 characters")
+    private String name;
 
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
+    @Size(max = 120, message = "Email cannot exceed 120 characters")
     private String email;
 
     @NotBlank(message = "Password is required")
-    @Size(min = 6, message = "Password should be at least 6 characters")
+    @Size(min = 8, message = "Password should be at least 8 characters")
     private String password;
 
-    @NotNull(message = "Role is required")
-    private UserRole role;
+    private UserRole role = UserRole.ROLE_USER;
+
+    private Boolean isPremium = false;
 }

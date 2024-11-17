@@ -18,17 +18,16 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserUpdateDto {
 
-    @NotBlank(message = "Username is required")
-    @Size(max = 50, message = "Username cannot exceed 50 characters")
-    private String username;
+    @NotBlank(message = "Name is required")
+    @Size(max = 100, message = "Name cannot exceed 100 characters")
+    private String name;
 
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
+    @Size(max = 120, message = "Email cannot exceed 120 characters")
     private String email;
 
-    @NotBlank(message = "Password is required")
-    @Size(min = 6, message = "Password should be at least 6 characters")
-    private String password;
-
     private UserRole role;
+
+    private Boolean isPremium;
 }
