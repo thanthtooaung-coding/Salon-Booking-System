@@ -1,12 +1,15 @@
 package com.org.salonBooking.api.promotion.entity;
 
 import com.org.salonBooking.api.promotion.enums.Status;
+import com.org.salonBooking.api.service.entity.Service;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents a promotion entity.
@@ -38,4 +41,12 @@ public class Promotion {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status = Status.ACTIVE;
+
+    @ManyToMany
+    @JoinTable(
+            name = "service_promotion",
+            joinColumns = @JoinColumn(name = "promotion_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_id")
+    )
+    private Set<Service> services = new HashSet<>();
 }
