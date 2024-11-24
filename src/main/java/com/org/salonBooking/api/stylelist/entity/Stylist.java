@@ -33,4 +33,7 @@ public class Stylist {
     @ManyToOne
     @JoinColumn(name = "salon_id", nullable = false)
     private Salon salon;
+
+    @Column(nullable = false)
+    private Double price;
 }
